@@ -45,10 +45,10 @@ if os.environ.get('OPERATION_ENV') is not None:
 if os.environ.get('LOGFILEPATH') is not None:
     LOGFILEPATH=os.environ['LOGFILEPATH']
 
-if os.environ.get('FORCEREMOVELOCKFILE') is not None:
-    FORCEREMOVELOCKFILE = os.environ['FORCEREMOVELOCKFILE']
 
-FORCEHARVESTSTART = os.getenv('FORCEHARVESTSTART', False)
+FORCEREMOVELOCKFILE = os.getenv('FORCEREMOVELOCKFILE','FALSE')
+
+FORCEHARVESTSTART = os.getenv('FORCEHARVESTSTART', 'FALSE')
 
 
 

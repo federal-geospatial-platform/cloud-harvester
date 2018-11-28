@@ -58,7 +58,7 @@ def lambda_handler(event, context):
     runlastfile = RESOURCEFILEPATH + "/run.last"
 
     #Check running instances
-    if(FORCEREMOVELOCKFILE == 'yes'):
+    if(FORCEREMOVELOCKFILE.upper() == 'YES' or FORCEREMOVELOCKFILE.upper() == 'TRUE'  ):
         if (os.path.isfile("/tmp/run.lock" ) ):
             os.remove("/tmp/run.lock")
 
@@ -136,9 +136,9 @@ def lambda_handler(event, context):
             exit(0)
 
     runlastfile = RESOURCEFILEPATH + "/run.last"
-
+    print "start timezz: " + str(FORCEHARVESTSTART)
     OGS_HARVEST_LAST_RUN = None
-    if FORCEHARVESTSTART is True:
+    if FORCEHARVESTSTART.upper() == 'TRUE':
         print "forcing run time using: " + str(LASTRUNTIME)
         OGS_HARVEST_LAST_RUN = LASTRUNTIME.strftime("%Y-%m-%dT%H:%M:%SZ")
     else:
@@ -159,11 +159,11 @@ def lambda_handler(event, context):
     logging.info(OGS_HARVEST_LAST_RUN)
 
     _output = subprocess.call("python ./harvest_hnap.py -f " + OGS_HARVEST_LAST_RUN + " > " +RESOURCEFILEPATH + "/harvested_records.xml", shell=True, stderr=subprocess.STDOUT )
-    logging.info(_output)
 
     # Create the common core JSON file
     try:
         _output = subprocess.check_output("cat " + RESOURCEFILEPATH + "/harvested_records.xml  | python ./hnap2cc-json.py", shell=True, stderr=subprocess.STDOUT )
+        print str(_output)
         logging.info(_output)
         pass
     except subprocess.CalledProcessError, e:
@@ -174,6 +174,7 @@ def lambda_handler(event, context):
     # Convert csv errors to html
     try:
         _output = subprocess.check_output("python ./csv2html.py -f " + RESOURCEFILEPATH + "/harvested_record_errors.csv", shell=True, stderr=subprocess.STDOUT)
+        print str(_output)
         logging.info(_output)
         pass
         # myfilesize=$(stat --format=%s "harvested_records.jl")
@@ -257,7 +258,7 @@ def lambda_handler(event, context):
     # print subprocess.check_output('ls -la -R /tmp', shell = True)
     return {
         "statusCode": 200,
-        "body": json.dumps("harvester job completed"),
+        "body": json.dumps("fgp-cloud-harvester job completed"),
         "time":  time.ctime()
         }
         
