@@ -129,6 +129,7 @@ source_hnap = ("csw.open.canada.ca/geonetwork/srv/"
 mappable_protocols = [
     "OGC:WMS",
     "ESRI REST: Map Service",
+    "ESRI REST: Map Server",
     "ESRI REST: Feature Service",
     "ESRI REST: Image Service",
     "ESRI REST: Tiled Map Service",
